@@ -77,21 +77,13 @@ namespace Qopy
                 //WriteObject(listOfFiles);
             }
             catch (ArgumentException ex)
-            {
-                WriteError(new ErrorRecord(ex, "1", ErrorCategory.InvalidArgument, source));
-            }
+            { WriteError(new ErrorRecord(ex, "1", ErrorCategory.InvalidArgument, source)); }
             catch (DirectoryNotFoundException ex)
-            {
-                WriteError(new ErrorRecord(ex, "2", ErrorCategory.ObjectNotFound, source));
-            }
+            { WriteError(new ErrorRecord(ex, "2", ErrorCategory.ObjectNotFound, source)); }
             catch (IOException ex)
-            {
-                WriteError(new ErrorRecord(ex, "3", ErrorCategory.ReadError, source));
-            }
+            { WriteError(new ErrorRecord(ex, "3", ErrorCategory.ReadError, source)); }
             catch (UnauthorizedAccessException ex)
-            {
-                WriteError(new ErrorRecord(ex, "4", ErrorCategory.PermissionDenied, source));
-            }
+            { WriteError(new ErrorRecord(ex, "4", ErrorCategory.PermissionDenied, source)); }
         }
 
         protected override void EndProcessing()
@@ -166,17 +158,11 @@ namespace Qopy
                             }
                         }
                         catch (NotSupportedException ex)
-                        {
-                            WriteError(new ErrorRecord(ex, "5", ErrorCategory.InvalidOperation, sourceFs));
-                        }
+                        { WriteError(new ErrorRecord(ex, "5", ErrorCategory.InvalidOperation, sourceFs)); }
                         catch (ObjectDisposedException ex)
-                        {
-                            WriteError(new ErrorRecord(ex, "6", ErrorCategory.ResourceUnavailable, sourceFs));
-                        }
+                        { WriteError(new ErrorRecord(ex, "6", ErrorCategory.ResourceUnavailable, sourceFs)); }
                         catch (IOException ex)
-                        {
-                            WriteError(new ErrorRecord(ex, "7", ErrorCategory.WriteError, fullDestination));
-                        }
+                        { WriteError(new ErrorRecord(ex, "7", ErrorCategory.WriteError, fullDestination)); }
                     }
 
                     DateTime end = DateTime.Now;
@@ -188,6 +174,5 @@ namespace Qopy
                 }
             }
         }
-
     }
 }

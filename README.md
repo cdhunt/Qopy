@@ -49,6 +49,16 @@ Todo
    * Stats Summary
    * Failure report
 
+Performance
+====
+Test Case:
+1,797 Files in 145 Folders
+108MB
+
+_Local System_<br />
+**Teracopy w/Test** 1:01<br />
+**Qopy** 0:27<br />
+
 Use
 ====
 [Binary Download](http://www.christophr.me/blog/2013/04/02/new-project-qopy/)
