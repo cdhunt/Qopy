@@ -39,8 +39,23 @@ Features
 
 CRC-32 functionality was developed by Damien Guard - [Calculating CRC-32 in C# and .NET](http://damieng.com/blog/2006/08/08/calculating_crc32_in_c_and_net)
 
+Performance
+====
+Test Case:
+1,797 Files in 145 Folders
+108MB
+
+_Local System_<br />
+**TeraCopy w/Test** 1:01<br />
+**Qopy** 0:27<br />
+
+_LAN_<br />
+**TeraCopy w/Test** 2:02<br />
+**Qopy** 1:31<br />
+
 Todo
 ====
+* WriteProgress
 * Async operations
 * Directory Check/Creation only once for each distinct destination path
 * Move (delete source)?
@@ -49,18 +64,10 @@ Todo
    * Stats Summary
    * Failure report
 
-Performance
-====
-Test Case:
-1,797 Files in 145 Folders
-108MB
-
-_Local System_<br />
-**Teracopy w/Test** 1:01<br />
-**Qopy** 0:27<br />
-
 Use
 ====
+**Requires Powershell v3.**
+
 [Binary Download](http://www.christophr.me/blog/2013/04/02/new-project-qopy/)
 
 1. Extract to `C:\Users\[username]\Documents\WindowsPowerShell\Modules` 
