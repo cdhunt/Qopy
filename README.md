@@ -48,3 +48,11 @@ Todo
 * Results Object Report Module
    * Stats Summary
    * Failure report
+
+Use
+====
+[Binary Download](http://www.christophr.me/blog/2013/04/02/new-project-qopy/)
+
+1. Extract to `C:\Users\[username]\Documents\WindowsPowerShell\Modules` 
+1.  `Import-Module Qopy`
+
