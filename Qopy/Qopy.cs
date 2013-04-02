@@ -62,7 +62,16 @@ namespace Qopy
         }
         private bool overwrite;
 
+        [Parameter(Mandatory = false, Position = 5)]
+        public SwitchParameter ShowProgress
+        {
+            get { return showProgress; }
+            set { showProgress = value; }
+        }
+        private bool showProgress;
+
         private IEnumerable<string> listOfFiles = null;
+        private int countOfFiles = 0;
         private Crc32 crc32 = new Crc32();
 
         protected override void BeginProcessing()
@@ -73,6 +82,11 @@ namespace Qopy
             try
             {
                 listOfFiles = Directory.EnumerateFiles(source, filter, searchOption);
+                using (IEnumerator<string> enumerator = listOfFiles.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                        countOfFiles++;
+                }
 
                 //WriteObject(listOfFiles);
             }
@@ -90,6 +104,10 @@ namespace Qopy
         {
             if (listOfFiles != null)
             {
+                ProgressRecord progress = new ProgressRecord(0, String.Format("Copy from {0} to {1}", source, destination), "Copying");
+                DateTime startTime = DateTime.Now;
+                int i = 0;
+
                 foreach (string file in listOfFiles)
                 {
                     string fullDestination = file.Replace(source, destination);
@@ -118,6 +136,7 @@ namespace Qopy
                     { WriteError(new ErrorRecord(ex, "12", ErrorCategory.InvalidOperation, fullDestination)); }
                     catch (IOException ex)
                     { WriteError(new ErrorRecord(ex, "13", ErrorCategory.WriteError, fullDestination)); }
+
 
                     using (FileStream sourceFs = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read ))
                     {
@@ -163,6 +182,7 @@ namespace Qopy
                         { WriteError(new ErrorRecord(ex, "6", ErrorCategory.ResourceUnavailable, sourceFs)); }
                         catch (IOException ex)
                         { WriteError(new ErrorRecord(ex, "7", ErrorCategory.WriteError, fullDestination)); }
+
                     }
 
                     DateTime end = DateTime.Now;
@@ -170,8 +190,20 @@ namespace Qopy
                     item.Time = end - start;
                     item.Match = item.SourceCRC == item.DestinationCRC;
 
+                    int pct = (int)((double)++i / (double)countOfFiles * 100);
+                    progress.PercentComplete = pct <= 100 ? pct : 100;
+                    progress.SecondsRemaining = (int)(((DateTime.Now - startTime).TotalSeconds / (double)i) * (countOfFiles - i));
+
+                    if (showProgress)
+                        WriteProgress(progress);
                     WriteObject(item);
                 }
+
+                progress.RecordType = ProgressRecordType.Completed;
+                progress.PercentComplete = 100;
+                
+                if (showProgress)
+                    WriteProgress(progress);
             }
         }
     }
