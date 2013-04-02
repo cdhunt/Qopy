@@ -14,7 +14,7 @@ One Cmdlet is exported.
 
 	SYNTAX
 		Copy-Files [-Source] <string> [-Destination] <string> [[-Filter] <string>]
-		[[-Recurse]] [[-Overwrite]]  [<CommonParameters>]
+		[[-Recurse]] [[-Overwrite]] [[-ShowProgress]]  [<CommonParameters>]
 
 The output is an object list with the following properties&#151;One object per source file.
 
@@ -55,7 +55,6 @@ _LAN_<br />
 
 Todo
 ====
-* WriteProgress
 * Async operations
 * Directory Check/Creation only once for each distinct destination path
 * Move (delete source)?
@@ -72,4 +71,6 @@ Use
 
 1. Extract to `C:\Users\[username]\Documents\WindowsPowerShell\Modules` 
 1.  `Import-Module Qopy`
+
+If you use the ShowProgress switch without capturing the Output to a variable, the screen will get very flashy.
 
