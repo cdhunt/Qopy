@@ -16,7 +16,7 @@ One Cmdlet is exported.
 		Copy-Files [-Source] <string> [-Destination] <string> [[-Filter] <string>]
 		[[-Recurse]] [[-Overwrite]] [[-ShowProgress]]  [<CommonParameters>]
 
-The output is an object list with the following properties&#151;One object per source file.
+The output is an object list with the following properties - one object per source file.
 
 	   TypeName: Qopy.FileCopyResultsItem
 
@@ -33,7 +33,7 @@ The output is an object list with the following properties&#151;One object per s
 Features
 ====
 * Attempts to not copy files when unnecessary.
-    * If file size is different and `Overwrite` switch is not enabled, do not copy.
+    * If file size is different and `Overwrite` switch is **not** enabled, do not copy.
     * If file size is the same and CRC check is the same, do not copy.
 * Validates source and destination contents match
 
