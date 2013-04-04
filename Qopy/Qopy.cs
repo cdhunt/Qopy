@@ -167,15 +167,15 @@ namespace Qopy
                                 
                                 if (dstFs.Length > 0 && overwrite)
                                 {
-                                    string hash = string.Empty;
-                                    foreach (byte b in crc32.ComputeHash(dstFs)) hash += b.ToString("x2").ToLower();
+                                    //string hash = string.Empty;
+                                    //foreach (byte b in crc32.ComputeHash(dstFs)) hash += b.ToString("x2").ToLower();
 
-                                    if (!(item.SourceCRC == hash))
-                                    {
+                                    //if (!(item.SourceCRC == hash))
+                                    //{
                                         dstFs.SetLength(0);
                                         dstFs.Flush();
                                         copyTheFile = true;
-                                    }
+                                    //}
                                 }
 
                                 if (copyTheFile)

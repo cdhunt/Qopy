@@ -83,9 +83,6 @@ Todo
 * Directory Check/Creation only once for each distinct destination path
 * Move (delete source)?
 * Validate only?
-* Results Object Report Module
-   * Stats Summary
-   * Failure report
 
 Use
 ====
