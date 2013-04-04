@@ -10,11 +10,11 @@
         <TableHeaders>
           <TableColumnHeader>
             <Label>Source</Label>
-            <Width>40</Width>
+            <Width>12</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Destination</Label>
-            <Width>40</Width>
+            <Width>32</Width>
           </TableColumnHeader>
           <TableColumnHeader>
             <Label>Size</Label>
@@ -22,13 +22,9 @@
             <Alignment>right</Alignment>
           </TableColumnHeader>	
           <TableColumnHeader>
-            <Label>SrcCRC</Label>
-            <Width>8</Width>
+            <Label>Time</Label>
+            <Width>18</Width>
           </TableColumnHeader>	
-          <TableColumnHeader>
-            <Label>DstCRC</Label>
-            <Width>8</Width>
-          </TableColumnHeader>
           <TableColumnHeader>
             <Label>Match</Label>
             <Width>5</Width>
@@ -47,11 +43,8 @@
                 <PropertyName>Size</PropertyName>
               </TableColumnItem>	
               <TableColumnItem>
-                <PropertyName>SourceCRC</PropertyName>
+                <PropertyName>Time</PropertyName>
               </TableColumnItem>	
-              <TableColumnItem>
-                <PropertyName>DestinationCRC</PropertyName>
-              </TableColumnItem>		
               <TableColumnItem>
                 <PropertyName>Match</PropertyName>
               </TableColumnItem>	

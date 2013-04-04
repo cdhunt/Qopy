@@ -19,6 +19,19 @@ namespace Qopy
         public bool Match;
     }
 
+    public class FileCopyResultsReport
+    {
+        public TimeSpan TotalTime;
+        public int FileCount;
+        public List<FileCopyResultsItem> FailedItemList;
+
+        public FileCopyResultsReport()
+        {
+            FileCount = 0;
+            FailedItemList = new List<FileCopyResultsItem>();
+        }
+    }
+
     [Cmdlet(VerbsCommon.Copy, "Files")]
     public class CopyFiles : Cmdlet
     {
@@ -176,6 +189,8 @@ namespace Qopy
                                 item.Size = dstFs.Length;
                             }
                         }
+                        catch (UnauthorizedAccessException ex)
+                        { WriteError(new ErrorRecord(ex, "5", ErrorCategory.SecurityError, fullDestination)); }
                         catch (NotSupportedException ex)
                         { WriteError(new ErrorRecord(ex, "5", ErrorCategory.InvalidOperation, sourceFs)); }
                         catch (ObjectDisposedException ex)
@@ -206,5 +221,33 @@ namespace Qopy
                     WriteProgress(progress);
             }
         }
+    }
+
+    [Cmdlet(VerbsCommon.Get, "CopyResultsReport")]
+    public class CopyResultsReport : Cmdlet
+    {
+        [Parameter(Mandatory=true, ValueFromPipeline=true)]
+        public FileCopyResultsItem InputObject
+        {
+            get { return inputObject; }
+            set { inputObject = value; }
+        }
+        private FileCopyResultsItem inputObject;
+
+        FileCopyResultsReport report = new FileCopyResultsReport();
+
+        protected override void ProcessRecord()
+        {
+            report.TotalTime += inputObject.Time;
+            report.FileCount++;
+            if (!inputObject.Match)
+                report.FailedItemList.Add(inputObject);
+        }
+
+        protected override void EndProcessing()
+        {
+            WriteObject(report);
+        }
+
     }
 }
