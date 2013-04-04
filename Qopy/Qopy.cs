@@ -23,6 +23,7 @@ namespace Qopy
     {
         public TimeSpan TotalTime;
         public int FileCount;
+        public long Bytes;
         public List<FileCopyResultsItem> FailedItemList;
 
         public FileCopyResultsReport()
@@ -240,8 +241,11 @@ namespace Qopy
         {
             report.TotalTime += inputObject.Time;
             report.FileCount++;
+            
             if (!inputObject.Match)
                 report.FailedItemList.Add(inputObject);
+            else
+                report.Bytes += inputObject.Size;
         }
 
         protected override void EndProcessing()

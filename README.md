@@ -7,16 +7,30 @@ XCopy, Robocopy and Teracopy are all good Windows utilities for copying a large 
 
 Qopy is a binary Powershell Module that provides some the functionality of all of those other utilities with an object output for advanced reporting and auditing.
 
-One Cmdlet is exported.
+Two Cmdlets are exported.
 
 	NAME
 		Copy-Files
+
+	SYNOPSIS
+		A Powershell File Copy Module with CRC Check.
 
 	SYNTAX
 		Copy-Files [-Source] <string> [-Destination] <string> [[-Filter] <string>]
 		[[-Recurse]] [[-Overwrite]] [[-ShowProgress]]  [<CommonParameters>]
 
-The output is an object list with the following properties - one object per source file.
+
+	NAME
+		Get-CopyResultsReport
+
+	SYNOPSIS
+		Aggregate output of Copy-Files
+
+	SYNTAX
+		Get-CopyResultsReport -InputObject <FileCopyResultsItem>
+		[<CommonParameters>]		
+
+The output is an object list with the following properties&#151;One object per source file.
 
 	   TypeName: Qopy.FileCopyResultsItem
 
@@ -30,10 +44,20 @@ The output is an object list with the following properties - one object per sour
 	SourceCRC      Property   string SourceCRC {get;set;}
 	Time           Property   timespan Time {get;set;}
 
+Get-CopyResultsReport returns the following properties.
+
+    TypeName: Qopy.FileCopyResultsReport
+
+	Name           MemberType Definition
+	----           ---------- ----------
+	Bytes          Property   long Bytes {get;set;}
+	FailedItemList Property   System.Collections.Generic.List[Qopy.FileCopyResul...
+	FileCount      Property   int FileCount {get;set;}
+	TotalTime      Property   timespan TotalTime {get;set;}	
 Features
 ====
 * Attempts to not copy files when unnecessary.
-    * If file size is different and `Overwrite` switch is **not** enabled, do not copy.
+    * If file size is different and `Overwrite` switch is not enabled, do not copy.
     * If file size is the same and CRC check is the same, do not copy.
 * Validates source and destination contents match
 
@@ -72,5 +96,5 @@ Use
 1. Extract to `C:\Users\[username]\Documents\WindowsPowerShell\Modules` 
 1.  `Import-Module Qopy`
 
-If you use the ShowProgress switch without capturing the Output to a variable, the screen will get very flashy.
+If you use the `ShowProgress` switch without capturing the Output, the screen will get very flashy.
 
