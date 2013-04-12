@@ -40,7 +40,7 @@ namespace Qopy
         public string Source
         {
             get { return source; }
-            set { source = value; }
+            set { source = value.TrimEnd(new char[] {'\\', '/'}); }
         }
         private string source;
 
@@ -48,7 +48,7 @@ namespace Qopy
         public string Destination
         {
             get { return destination; }
-            set { destination = value; }
+            set { destination = value.TrimEnd(new char[] { '\\', '/' }); }
         }
         private string destination;
 
