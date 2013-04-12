@@ -88,7 +88,7 @@ Use
 ====
 **Requires Powershell v3.**
 
-[Binary Download](http://www.christophr.me/blog/2013/04/02/new-project-qopy/)
+[Binary Download](http://www.automatedops.com/downloads/Qopy1.01.zip)
 
 1. Extract to `C:\Users\[username]\Documents\WindowsPowerShell\Modules` 
 1.  `Import-Module Qopy`
