@@ -1,7 +1,7 @@
 Qopy
 ====
 
-A Powershell File Copy Module with CRC Check.
+A _Quick_ Powershell File Copy Module with CRC Check.
 
 XCopy, Robocopy and Teracopy are all good Windows utilities for copying a large amount of files, but none of them offer easily machine-readable results report. An efficient, reliable and audit-able _copy utility_ is critical for large-scale, automated software deployments.
 
@@ -77,12 +77,17 @@ _LAN_<br />
 **TeraCopy w/Test** 2:02<br />
 **Qopy** 1:31<br />
 
+Changes in 1.01
+====
+Removed some unnecessary IO by eliminating redundant file existence checks. Should improve network file copy performance a little bit.
+
 Todo
 ====
-* Async operations
-* Directory Check/Creation only once for each distinct destination path
+* A bunch of code clean-up
+* Update Progress bar to use Bytes instead of File Count
 * Move (delete source)?
 * Validate only?
+* Do not Validate?
 
 Use
 ====
