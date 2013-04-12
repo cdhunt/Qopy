@@ -85,6 +85,7 @@ namespace Qopy
         private bool showProgress;
 
         private IEnumerable<string> listOfFiles = null;
+        private List<string> listofDestinationDirs = new List<string>();
         private int countOfFiles = 0;
         private Crc32 crc32 = new Crc32();
 
@@ -96,11 +97,24 @@ namespace Qopy
             try
             {
                 listOfFiles = Directory.EnumerateFiles(source, filter, searchOption);
-                using (IEnumerator<string> enumerator = listOfFiles.GetEnumerator())
+
+                List<string> destPathList = new List<string>();
+
+                foreach (string file in listOfFiles)
                 {
-                    while (enumerator.MoveNext())
-                        countOfFiles++;
+                    countOfFiles++;
+
+                    string destinationPath = Path.GetDirectoryName(file.Replace(source, destination));
+
+                    if (!listofDestinationDirs.Contains(destinationPath))
+                        listofDestinationDirs.Add(destinationPath);
                 }
+
+                //using (IEnumerator<string> enumerator = listOfFiles.GetEnumerator())
+                //{
+                //    while (enumerator.MoveNext())
+                //        countOfFiles++;
+                //}
 
                 //WriteObject(listOfFiles);
             }
@@ -122,6 +136,29 @@ namespace Qopy
                 DateTime startTime = DateTime.Now;
                 int i = 0;
 
+                foreach (string dir in listofDestinationDirs)
+                {
+                    try
+                    {
+                        if (!Directory.Exists(dir))
+                            Directory.CreateDirectory(dir);
+                    }
+                    catch (UnauthorizedAccessException ex)
+                    { WriteError(new ErrorRecord(ex, "8", ErrorCategory.PermissionDenied, dir)); }
+                    catch (PathTooLongException ex)
+                    { WriteError(new ErrorRecord(ex, "9", ErrorCategory.InvalidArgument, dir)); }
+                    catch (ArgumentNullException ex)
+                    { WriteError(new ErrorRecord(ex, "10", ErrorCategory.InvalidArgument, dir)); }
+                    catch (ArgumentException ex)
+                    { WriteError(new ErrorRecord(ex, "10", ErrorCategory.InvalidArgument, dir)); }
+                    catch (DirectoryNotFoundException ex)
+                    { WriteError(new ErrorRecord(ex, "11", ErrorCategory.ObjectNotFound, dir)); }
+                    catch (NotSupportedException ex)
+                    { WriteError(new ErrorRecord(ex, "12", ErrorCategory.InvalidOperation, dir)); }
+                    catch (IOException ex)
+                    { WriteError(new ErrorRecord(ex, "13", ErrorCategory.WriteError, dir)); }
+                }
+
                 foreach (string file in listOfFiles)
                 {
                     string fullDestination = file.Replace(source, destination);
@@ -129,28 +166,6 @@ namespace Qopy
                     FileCopyResultsItem item = new FileCopyResultsItem() { Source = file, Destination = fullDestination };
 
                     DateTime start = DateTime.Now;
-
-                    try
-                    {
-                        //TODO: Get all unique paths once and create if necessary
-                        if (!Directory.Exists(Path.GetDirectoryName(fullDestination)))
-                            Directory.CreateDirectory(Path.GetDirectoryName(fullDestination));
-                    }
-                    catch (UnauthorizedAccessException ex)
-                    { WriteError(new ErrorRecord(ex, "8", ErrorCategory.PermissionDenied, fullDestination)); }
-                    catch (PathTooLongException ex)
-                    { WriteError(new ErrorRecord(ex, "9", ErrorCategory.InvalidArgument, fullDestination)); }
-                    catch (ArgumentNullException ex)
-                    { WriteError(new ErrorRecord(ex, "10", ErrorCategory.InvalidArgument, fullDestination)); }
-                    catch (ArgumentException ex)
-                    { WriteError(new ErrorRecord(ex, "10", ErrorCategory.InvalidArgument, fullDestination)); }
-                    catch (DirectoryNotFoundException ex)
-                    { WriteError(new ErrorRecord(ex, "11", ErrorCategory.ObjectNotFound, fullDestination)); }
-                    catch (NotSupportedException ex)
-                    { WriteError(new ErrorRecord(ex, "12", ErrorCategory.InvalidOperation, fullDestination)); }
-                    catch (IOException ex)
-                    { WriteError(new ErrorRecord(ex, "13", ErrorCategory.WriteError, fullDestination)); }
-
 
                     using (FileStream sourceFs = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.Read ))
                     {
