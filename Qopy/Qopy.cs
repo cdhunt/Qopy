@@ -16,7 +16,8 @@ namespace Qopy
         public TimeSpan Time;
         public string SourceCRC;
         public string DestinationCRC;
-        public bool Match;
+        public bool Match = false;
+        public string ErrorMessage = string.Empty;
     }
 
     public class FileCopyResultsReport
@@ -34,6 +35,7 @@ namespace Qopy
     }
 
     [Cmdlet(VerbsCommon.Copy, "Files")]
+    [CmdletBinding]
     public class CopyFiles : Cmdlet
     {
         [Parameter(Mandatory = true, Position = 0)]
@@ -84,10 +86,12 @@ namespace Qopy
         }
         private bool showProgress;
 
+
         private IEnumerable<string> listOfFiles = null;
         private List<string> listofDestinationDirs = new List<string>();
         private int countOfFiles = 0;
         private Crc32 crc32 = new Crc32();
+        
 
         protected override void BeginProcessing()
         {
@@ -109,14 +113,6 @@ namespace Qopy
                     if (!listofDestinationDirs.Contains(destinationPath))
                         listofDestinationDirs.Add(destinationPath);
                 }
-
-                //using (IEnumerator<string> enumerator = listOfFiles.GetEnumerator())
-                //{
-                //    while (enumerator.MoveNext())
-                //        countOfFiles++;
-                //}
-
-                //WriteObject(listOfFiles);
             }
             catch (ArgumentException ex)
             { WriteError(new ErrorRecord(ex, "1", ErrorCategory.InvalidArgument, source)); }
@@ -182,15 +178,10 @@ namespace Qopy
                                 
                                 if (dstFs.Length > 0 && overwrite)
                                 {
-                                    //string hash = string.Empty;
-                                    //foreach (byte b in crc32.ComputeHash(dstFs)) hash += b.ToString("x2").ToLower();
+                                    dstFs.SetLength(0);
+                                    dstFs.Flush();
+                                    copyTheFile = true;
 
-                                    //if (!(item.SourceCRC == hash))
-                                    //{
-                                        dstFs.SetLength(0);
-                                        dstFs.Flush();
-                                        copyTheFile = true;
-                                    //}
                                 }
 
                                 if (copyTheFile)
@@ -206,13 +197,24 @@ namespace Qopy
                             }
                         }
                         catch (UnauthorizedAccessException ex)
-                        { WriteError(new ErrorRecord(ex, "5", ErrorCategory.SecurityError, fullDestination)); }
+                        {   ErrorRecord er = new ErrorRecord(ex, "5", ErrorCategory.SecurityError, fullDestination);
+                            item.ErrorMessage = er.Exception.Message;
+                        }
                         catch (NotSupportedException ex)
-                        { WriteError(new ErrorRecord(ex, "5", ErrorCategory.InvalidOperation, sourceFs)); }
+                        {   
+                            ErrorRecord er = new ErrorRecord(ex, "5", ErrorCategory.InvalidOperation, sourceFs);
+                            item.ErrorMessage = er.Exception.Message;
+                        }
                         catch (ObjectDisposedException ex)
-                        { WriteError(new ErrorRecord(ex, "6", ErrorCategory.ResourceUnavailable, sourceFs)); }
+                        { 
+                            ErrorRecord er = new ErrorRecord(ex, "6", ErrorCategory.ResourceUnavailable, sourceFs);
+                            item.ErrorMessage = er.Exception.Message;
+                        }
                         catch (IOException ex)
-                        { WriteError(new ErrorRecord(ex, "7", ErrorCategory.WriteError, fullDestination)); }
+                        { 
+                            ErrorRecord er = new ErrorRecord(ex, "7", ErrorCategory.WriteError, fullDestination);
+                            item.ErrorMessage = er.Exception.Message;  
+                        }
 
                     }
 
@@ -227,6 +229,10 @@ namespace Qopy
 
                     if (showProgress)
                         WriteProgress(progress);
+
+                    if (!string.IsNullOrEmpty(item.ErrorMessage))
+                        WriteVerbose(item.ErrorMessage);
+
                     WriteObject(item);
                 }
 
