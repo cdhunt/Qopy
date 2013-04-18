@@ -140,19 +140,19 @@ namespace Qopy
                             Directory.CreateDirectory(dir);
                     }
                     catch (UnauthorizedAccessException ex)
-                    { WriteError(new ErrorRecord(ex, "8", ErrorCategory.PermissionDenied, dir)); }
+                    { WriteVerbose(ex.Message); }
                     catch (PathTooLongException ex)
-                    { WriteError(new ErrorRecord(ex, "9", ErrorCategory.InvalidArgument, dir)); }
+                    { WriteVerbose(ex.Message); ; }
                     catch (ArgumentNullException ex)
-                    { WriteError(new ErrorRecord(ex, "10", ErrorCategory.InvalidArgument, dir)); }
+                    { WriteVerbose(ex.Message); ; }
                     catch (ArgumentException ex)
-                    { WriteError(new ErrorRecord(ex, "10", ErrorCategory.InvalidArgument, dir)); }
+                    { WriteVerbose(ex.Message); }
                     catch (DirectoryNotFoundException ex)
-                    { WriteError(new ErrorRecord(ex, "11", ErrorCategory.ObjectNotFound, dir)); }
+                    { WriteVerbose(ex.Message); }
                     catch (NotSupportedException ex)
-                    { WriteError(new ErrorRecord(ex, "12", ErrorCategory.InvalidOperation, dir)); }
+                    { WriteVerbose(ex.Message); }
                     catch (IOException ex)
-                    { WriteError(new ErrorRecord(ex, "13", ErrorCategory.WriteError, dir)); }
+                    { WriteVerbose(ex.Message); }
                 }
 
                 foreach (string file in listOfFiles)
