@@ -62,7 +62,7 @@ namespace Qopy
         }
         private string filter = "*";
 
-        [Parameter(Mandatory = false, Position = 3)]
+        [Parameter(Mandatory = false)]
         public SwitchParameter Recurse
         {
             get { return recurse; }
@@ -70,7 +70,7 @@ namespace Qopy
         }
         private bool recurse;
 
-        [Parameter(Mandatory = false, Position = 4)]
+        [Parameter(Mandatory = false)]
         public SwitchParameter Overwrite
         {
             get { return overwrite; }
@@ -78,7 +78,15 @@ namespace Qopy
         }
         private bool overwrite;
 
-        [Parameter(Mandatory = false, Position = 5)]
+        [Parameter(Mandatory = false)]
+        public SwitchParameter SetTime
+        {
+            get { return settime; }
+            set { settime = value; }
+        }
+        private bool settime;
+
+        [Parameter(Mandatory = false)]
         public SwitchParameter ShowProgress
         {
             get { return showProgress; }
@@ -181,19 +189,26 @@ namespace Qopy
                                     dstFs.SetLength(0);
                                     dstFs.Flush();
                                     copyTheFile = true;
-
                                 }
 
                                 if (copyTheFile)
                                 {
+                                    
                                     sourceFs.Position = 0;
                                     dstFs.Position = 0;
-                                    sourceFs.CopyTo(dstFs);
+                                    sourceFs.CopyTo(dstFs);     
                                 }                               
                                 
                                 dstFs.Position = 0;
                                 foreach (byte b in crc32.ComputeHash(dstFs)) item.DestinationCRC += b.ToString("x2").ToLower();
                                 item.Size = dstFs.Length;
+                            }
+                            
+                            if (settime)
+                            {
+                                File.SetCreationTimeUtc(fullDestination, File.GetCreationTimeUtc(file));
+                                File.SetLastWriteTimeUtc(fullDestination, File.GetLastWriteTimeUtc(file));
+                                File.SetLastAccessTimeUtc(fullDestination, File.GetLastAccessTimeUtc(file));
                             }
                         }
                         catch (UnauthorizedAccessException ex)
