@@ -17,7 +17,7 @@ Two Cmdlets are exported.
 
 	SYNTAX
 		Copy-Files [-Source] <string> [-Destination] <string> [[-Filter] <string>]
-		[[-Recurse]] [[-Overwrite]] [[-ShowProgress]]  [<CommonParameters>]
+		[[-Recurse]] [[-SetTime]] [[-Overwrite]] [[-ShowProgress]]  [<CommonParameters>]
 
 
 	NAME
@@ -80,6 +80,10 @@ _LAN_<br />
 
 Changes
 ====
+
+1.0.3
+----
+* Added the SetTime switch to copy timestamp metadata. This increases copy time by as much as 300%.
 
 1.0.2
 ----
